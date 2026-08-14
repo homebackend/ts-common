@@ -18,8 +18,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
-    "prepublishOnly": "npm run build",
+    "build:js": "tsup src/index.ts --format cjs,esm",
+    "build:dts": "tsc --emitDeclarationOnly --declaration",
+    "build": "npm run build:js && npm run build:dts",
     "prepare": "npm run build"
   },
   "devDependencies": {
