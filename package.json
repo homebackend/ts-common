@@ -24,6 +24,8 @@
     "prepare": "npm run build"
   },
   "devDependencies": {
+    "@girs/glib-2.0": "^4.1.0",
+    "@girs/soup-3.0": "^4.1.0",
     "@types/node": "^26.2.0",
     "@types/semver": "^7.8.0",
     "tsup": "^8.5.1",
