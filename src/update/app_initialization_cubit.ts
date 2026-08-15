@@ -1,4 +1,5 @@
 import { Cubit } from './cubit.js';
+import { fetchWrapper } from './fetch.js';
 import { AppInitializationState, AppInitializationStatus } from './types.js';
 import { UpdateEnvironment } from './update_environment.js';
 import * as semver from 'semver';
@@ -129,7 +130,7 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
   }
 
   private async _fetchReleases(): Promise<any[] | { message?: string }> {
-    const r = await fetch(`${this.baseGitHubUrl}/releases?per_page=10`, {
+    const r = await fetchWrapper(`${this.baseGitHubUrl}/releases?per_page=10`, {
       headers: this.headers as any,
     });
     if (!r.ok) throw new Error(`GitHub ${r.status}`);
@@ -140,7 +141,7 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
     const assetsUrl = release.assets_url;
     if (!assetsUrl) return fallback;
     try {
-      const r = await fetch(assetsUrl, { headers: this.headers as any });
+      const r = await fetchWrapper(assetsUrl, { headers: this.headers as any });
       if (!r.ok) return fallback;
       const assets = await r.json();
       const target = this.env.getTargetAssetName(
@@ -156,7 +157,7 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
 
   private async _generateChangelog(baseTag: string, headTag: string) {
     try {
-      const r = await fetch(
+      const r = await fetchWrapper(
         `${this.baseGitHubUrl}/compare/${baseTag}...${headTag}`,
         { headers: this.headers as any }
       );
