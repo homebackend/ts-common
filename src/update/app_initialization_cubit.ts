@@ -133,7 +133,7 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
     const r = await fetchWrapper(`${this.baseGitHubUrl}/releases?per_page=10`, {
       headers: this.headers as any,
     });
-    if (!r.ok) throw new Error(`GitHub ${r.status}`);
+    if (!r.ok) throw new Error(`GitHub ${r.status} ${r.statusText}`);
     return r.json();
   }
 

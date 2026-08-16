@@ -10,6 +10,7 @@ export async function fetch(
   const message = Soup.Message.new("GET", url);
 
   const reqHeaders = message.get_request_headers();
+  reqHeaders.append('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)');
   for (const [key, value] of Object.entries(headers["headers"])) {
     reqHeaders.append(key, value);
   }
@@ -31,7 +32,14 @@ export async function fetch(
 
   const statusCode = message.get_status();
   if (statusCode !== Soup.Status.OK) {
-    return { ok: false, status: statusCode, json: async () => "" };
+    const reason = message.get_reason_phrase();
+    const text = new TextDecoder().decode(bytes.get_data() ?? new Uint8Array());
+    return {
+      ok: false,
+      status: statusCode,
+      statusText: `${reason}: ${text}`,
+      json: async () => "",
+    };
   }
 
   const text = new TextDecoder().decode(bytes.get_data()!);
