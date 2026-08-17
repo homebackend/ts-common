@@ -1,8 +1,8 @@
 import Soup from "gi://Soup?version=3.0";
 import GLib from "gi://GLib";
-import { FetchWrapperResponse } from "./fetch.js";
+import { FetchWrapperResponse } from "./app_initialization_cubit.js";
 
-export async function fetch(
+export async function gnomeFetch(
   url: string,
   headers: Record<string, string> = {},
 ): Promise<FetchWrapperResponse> {
