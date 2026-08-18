@@ -14,6 +14,16 @@
   "main": "dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./gnome": {
+      "types": "./dist/gnome/index.d.ts",
+      "default": "./dist/gnome/index.js"
+    }
+  },
   "files": [
     "dist"
   ],
