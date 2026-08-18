@@ -6,7 +6,7 @@ export abstract class AppUpdateCubit extends Cubit<AppUpdateStatus> {
   constructor(
     protected upgradeFileName: string,
     protected env: UpdateEnvironment,
-    protected log: (logs: string[]) => void
+    protected log: (logs: string[]) => void,
   ) {
     super(new AppUpdateStatus(AppUpdateState.userInput));
   }

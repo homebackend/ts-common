@@ -1,7 +1,7 @@
-import { Cubit } from "./cubit.js";
-import { AppInitializationState, AppInitializationStatus } from "./types.js";
-import { UpdateEnvironment } from "./update_environment.js";
-import * as semver from "semver";
+import { Cubit } from './cubit.js';
+import { AppInitializationState, AppInitializationStatus } from './types.js';
+import { UpdateEnvironment } from './update_environment.js';
+import * as semver from 'semver';
 
 export interface FetchWrapperResponse {
   readonly ok: boolean;
@@ -15,7 +15,7 @@ export interface FetchWrapperResponse {
 export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
   private baseGitHubUrl: string;
   private userContentUrl: string;
-  private headers = { Accept: "application/vnd.github.v3+json" };
+  private headers = { Accept: 'application/vnd.github.v3+json' };
 
   constructor(
     organization: string,
@@ -38,7 +38,7 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
       new AppInitializationStatus(AppInitializationState.initialization),
     );
     if (!this.env.isUpdateCheckSupported()) {
-      this.log(["Update check not supported on this platform"]);
+      this.log(['Update check not supported on this platform']);
       this.emitInitialized();
       return;
     }
@@ -70,7 +70,7 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
       }
 
       if (!releases.length) {
-        this.log(["No releases are available"]);
+        this.log(['No releases are available']);
         this.emitInitialized();
         return;
       }
@@ -78,7 +78,7 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
       const latest = releases[0];
       const rawTag = latest.tag_name as string;
       const latestVersion =
-        semver.coerce(rawTag)?.version || rawTag.replace(/^v/, "");
+        semver.coerce(rawTag)?.version || rawTag.replace(/^v/, '');
       const currentVersion =
         semver.coerce(current.version)?.version || current.version;
 
@@ -98,9 +98,9 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
 
       if (!isUpdateAvailable) {
         this.log([
-          "No new update is available",
+          'No new update is available',
           currentVersion,
-          "==",
+          '==',
           latestVersion,
         ]);
         this.emitInitialized();
@@ -136,9 +136,12 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
   }
 
   private async _fetchReleases(): Promise<any[] | { message?: string }> {
-    const r = await this.fetchWrapper(`${this.baseGitHubUrl}/releases?per_page=10`, {
-      headers: this.headers as any,
-    });
+    const r = await this.fetchWrapper(
+      `${this.baseGitHubUrl}/releases?per_page=10`,
+      {
+        headers: this.headers as any,
+      },
+    );
     if (!r.ok) throw new Error(`GitHub ${r.status} ${r.statusText}`);
     return r.json();
   }
@@ -147,12 +150,14 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
     const assetsUrl = release.assets_url;
     if (!assetsUrl) return fallback;
     try {
-      const r = await this.fetchWrapper(assetsUrl, { headers: this.headers as any });
+      const r = await this.fetchWrapper(assetsUrl, {
+        headers: this.headers as any,
+      });
       if (!r.ok) return fallback;
       const assets = await r.json();
       const target = this.env.getTargetAssetName(
         this.baseAssetName,
-        release.tag_name.replace(/^v/, ""),
+        release.tag_name.replace(/^v/, ''),
       );
       const hit = assets.find((a: any) => a.name === target);
       return hit?.browser_download_url || fallback;
@@ -167,20 +172,20 @@ export class AppInitializationCubit extends Cubit<AppInitializationStatus> {
         `${this.baseGitHubUrl}/compare/${baseTag}...${headTag}`,
         { headers: this.headers as any },
       );
-      if (!r.ok) return "### Updates Available\n* Changelog unretrievable";
+      if (!r.ok) return '### Updates Available\n* Changelog unretrievable';
       const data = await r.json();
       const commits = data.commits || [];
       let md = `### Changes since ${baseTag}:\n\n`;
-      if (!commits.length) md += "* No commits";
+      if (!commits.length) md += '* No commits';
       else
         for (const c of [...commits].reverse()) {
-          const title = (c.commit?.message || "").split("\n")[0].trim();
-          const author = c.commit?.author?.name || "Anonymous";
+          const title = (c.commit?.message || '').split('\n')[0].trim();
+          const author = c.commit?.author?.name || 'Anonymous';
           if (title) md += `* ${title} (by ${author})\n`;
         }
       return md.trim();
     } catch {
-      return "### Updates Available\n* Failed generating changelog";
+      return '### Updates Available\n* Failed generating changelog';
     }
   }
 }

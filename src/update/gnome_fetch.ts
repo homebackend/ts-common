@@ -1,17 +1,17 @@
-import Soup from "gi://Soup?version=3.0";
-import GLib from "gi://GLib";
-import { FetchWrapperResponse } from "./app_initialization_cubit.js";
+import Soup from 'gi://Soup?version=3.0';
+import GLib from 'gi://GLib';
+import { FetchWrapperResponse } from './app_initialization_cubit.js';
 
 export async function gnomeFetch(
   url: string,
   headers: Record<string, string> = {},
 ): Promise<FetchWrapperResponse> {
   const session = new Soup.Session();
-  const message = Soup.Message.new("GET", url);
+  const message = Soup.Message.new('GET', url);
 
   const reqHeaders = message.get_request_headers();
   reqHeaders.append('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)');
-  for (const [key, value] of Object.entries(headers["headers"])) {
+  for (const [key, value] of Object.entries(headers['headers'])) {
     reqHeaders.append(key, value);
   }
 
@@ -38,7 +38,7 @@ export async function gnomeFetch(
       ok: false,
       status: statusCode,
       statusText: `${reason}: ${text}`,
-      json: async () => "",
+      json: async () => '',
     };
   }
 

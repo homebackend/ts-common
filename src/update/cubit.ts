@@ -11,7 +11,7 @@ export class Cubit<S> {
 
   protected emitState(next: S) {
     this._state = next;
-    this.stateListeners.forEach((l) => l(next));
+    this.stateListeners.forEach(l => l(next));
   }
 
   on(event: 'state', listener: (s: S) => void): { remove: () => void } {

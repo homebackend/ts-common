@@ -15,6 +15,6 @@ export interface UpdateEnvironment {
   downloadFile?(
     url: string,
     tmpPath: string,
-    onProgress: (pct: string) => void
+    onProgress: (pct: string) => void,
   ): Promise<boolean>;
 }

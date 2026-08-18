@@ -13,7 +13,7 @@ export class AppInitializationStatus {
     public readonly downloadUrl?: string,
     public readonly latestVersion?: string,
     public readonly changeLog?: string,
-    public readonly error?: string
+    public readonly error?: string,
   ) {}
 }
 
@@ -40,7 +40,7 @@ export enum OtaStatus {
 export class OtaEvent {
   constructor(
     public readonly status: OtaStatus,
-    public readonly value: string = ''
+    public readonly value: string = '',
   ) {}
 }
 
@@ -48,6 +48,6 @@ export class AppUpdateStatus {
   constructor(
     public readonly state: AppUpdateState,
     public readonly event?: OtaEvent,
-    public readonly error?: string
+    public readonly error?: string,
   ) {}
 }
